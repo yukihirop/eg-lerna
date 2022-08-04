@@ -33,6 +33,7 @@ jobs:
           git checkout -b ${{ env.RELEASE_BRANCH }}
           git push --set-upstream origin ${{ env.RELEASE_BRANCH }}
       - name: version up
+        run: |
           yarn versionup:patch --yes
           git push
       - name: set git tag
