@@ -22,7 +22,6 @@ jobs:
       - run: yarn --frozen-lockfile
       - name: git config
         run: |
-          git remote set-url origin https://github-actions:${secrets.GITHUB_TOKEN}@github.com/${secrets.GITHUB_REPOSITORY}
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
       - name: create release
@@ -34,8 +33,7 @@ jobs:
           git add .
           git commit -nm "update gitignore"
           git push --set-upstream origin ${{ env.RELEASE_BRANCH }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          echo -n $(git log --oneline)
       - name: set git tag
         run: |
           echo "tag_no=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
