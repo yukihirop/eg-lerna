@@ -14,7 +14,6 @@ jobs:
         with:
           ref: 'refs/heads/main'
           fetch-depth: 0 # All history
-          token: ${{secrets.GPR_FULL_ACCESS_TOKEN}}
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
@@ -30,11 +29,14 @@ jobs:
       - name: create release
         run: |
           git fetch --tags
-          git checkout -b ${{ env.RELEASE_BRANCH }}
-          git push --set-upstream origin ${{ env.RELEASE_BRANCH }}
+          git checkout -b release
+          git push --set-upstream origin release
       - name: version up
         run: |
           yarn versionup:patch --yes
+          echo "hoge" >> '.gitignore'
+          git add .
+          git commit -nm "hoge"
           git push
       - name: set git tag
         run: |
@@ -43,7 +45,7 @@ jobs:
         id: create_release_pr
         uses: peter-evans/create-pull-request@v3
         with:
-          branch: ${{ env.RELEASE_BRANCH }}
+          branch: release
           base: main
           title: Deploy ${{ env.tag_no }}
           draft: false
