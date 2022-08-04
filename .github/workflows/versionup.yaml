@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  RELEASE_BRANCH: release
+  RELEASE_BRANCH: release_today
 
 jobs:
   versionup-patch:
@@ -31,7 +31,6 @@ jobs:
       - name: version up
         run: |
           yarn versionup:patch --yes
-          git push
       - name: set git tag
         run: |
           echo "tag_no=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
