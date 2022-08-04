@@ -4,7 +4,6 @@ on:
   workflow_dispatch:
 
 env:
-  GITHUB_PACKAGE_TOKEN: ${{ secrets.GPR_FULL_ACCESS_TOKEN }}
   RELEASE_BRANCH: release
 
 jobs:
@@ -15,7 +14,7 @@ jobs:
         with:
           ref: 'refs/heads/main'
           fetch-depth: 0 # All history
-          token: ${{secrets.GITHUB_TOKEN}}
+          token: ${{secrets.GPR_FULL_ACCESS_TOKEN}}
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
@@ -37,7 +36,6 @@ jobs:
           git add .
           git commit -nm "update gitignore"
           git push --set-upstream origin ${{ env.RELEASE_BRANCH }}
-          echo -n $(git log --oneline)
       - name: set git tag
         run: |
           echo "tag_no=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
