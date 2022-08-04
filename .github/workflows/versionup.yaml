@@ -1,7 +1,7 @@
 name: Versionup Patch
 
 on:
-  workflow_dispatch:
+  push:
 
 env:
   RELEASE_BRANCH: release
