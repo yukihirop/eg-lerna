@@ -31,11 +31,10 @@ jobs:
         run: |
           git fetch --tags
           git checkout -b ${{ env.RELEASE_BRANCH }}
-          yarn versionup:patch --yes
-          echo 'hoge' >> .gitignore
-          git add .
-          git commit -nm "update gitignore"
           git push --set-upstream origin ${{ env.RELEASE_BRANCH }}
+      - name: version up
+          yarn versionup:patch --yes
+          git push
       - name: set git tag
         run: |
           echo "tag_no=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
