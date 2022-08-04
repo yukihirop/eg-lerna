@@ -29,8 +29,8 @@ jobs:
       - name: create release
         run: |
           git fetch --tags
-          git checkout -b ${{ env.RELEASE_BRANCH }}
-          git push --set-upstream origin ${{ env.RELEASE_BRANCH }}
+          git checkout -b release_latest
+          git push --set-upstream origin release_latest
       - name: version up
         run: |
           yarn versionup:patch --yes
@@ -42,7 +42,7 @@ jobs:
         id: create_release_pr
         uses: peter-evans/create-pull-request@v3
         with:
-          branch: ${{ env.RELEASE_BRANCH }}
+          branch: release_latest
           base: main
           title: Deploy ${{ env.tag_no }}
           draft: false
