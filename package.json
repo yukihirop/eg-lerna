@@ -4,6 +4,9 @@
   "workspaces": [
     "packages/*"
   ],
+  "scripts": {
+    "versionup:patch": "lerna version patch --conventional-commits --no-push"
+  },
   "devDependencies": {
     "lerna": "^5.3.0"
   }

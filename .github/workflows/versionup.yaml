@@ -1,0 +1,47 @@
+name: Versionup Patch
+
+on:
+  workflow_dispatch:
+
+env:
+  GITHUB_PACKAGE_TOKEN: ${{ secrets.GPR_FULL_ACCESS_TOKEN }}
+  RELEASE_BRANCH: release
+
+jobs:
+  versionup-patch:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - run: yarn --frozen-lockfile
+      - name: git config
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+      - name: create release
+        run: |
+          git fetch --tags
+          git checkout -b ${{ env.RELEASE_BRANCH }}
+          yarn versionup:patch --yes
+          git push --set-upstream origin ${{ env.RELEASE_BRANCH }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: set git tag
+        run: |
+          echo "tag_no=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+      - name: Create release PR
+        id: create_release_pr
+        uses: peter-evans/create-pull-request@v3
+        with:
+          branch: ${{ env.RELEASE_BRANCH }}
+          base: main
+          title: Deploy ${{ env.tag_no }}
+          draft: false
+
+
