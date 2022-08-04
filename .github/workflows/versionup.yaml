@@ -8,9 +8,6 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-        with:
-          ref: 'refs/heads/main'
-          fetch-depth: 0 # All history
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
@@ -36,7 +33,6 @@ jobs:
         run: |
           echo "tag_no=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
       - name: Create release PR
-        id: create_release_pr
         uses: peter-evans/create-pull-request@v3
         with:
           branch: release_today
