@@ -29,7 +29,9 @@ jobs:
           git fetch --tags
           git checkout -b ${{ env.RELEASE_BRANCH }}
           yarn versionup:patch --yes
-          echo -n $(git log --oneline)
+          echo 'hoge' >> .gitignore
+          git add .
+          git commit -nm "update gitignore"
           git push --set-upstream origin ${{ env.RELEASE_BRANCH }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
