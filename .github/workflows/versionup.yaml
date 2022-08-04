@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  RELEASE_BRANCH: release
+  RELEASE_BRANCH: latest_release
 
 jobs:
   versionup-patch:
@@ -29,14 +29,11 @@ jobs:
       - name: create release
         run: |
           git fetch --tags
-          git checkout -b release
-          git push --set-upstream origin release
+          git checkout -b ${{ env.RELEASE_BRANCH }}
+          git push --set-upstream origin ${{ env.RELEASE_BRANCH }}
       - name: version up
         run: |
           yarn versionup:patch --yes
-          echo "hoge" >> '.gitignore'
-          git add .
-          git commit -nm "hoge"
           git push
       - name: set git tag
         run: |
@@ -45,7 +42,7 @@ jobs:
         id: create_release_pr
         uses: peter-evans/create-pull-request@v3
         with:
-          branch: release
+          branch: ${{ env.RELEASE_BRANCH }}
           base: main
           title: Deploy ${{ env.tag_no }}
           draft: false
