@@ -29,15 +29,15 @@ jobs:
         run: |
           yarn versionup:patch --yes
           git push
-      - name: set git tag
-        run: |
-          echo "tag_no=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
-      - name: Create release PR
-        uses: peter-evans/create-pull-request@v3
-        with:
-          branch: release_today
-          base: main
-          title: Deploy ${{ env.tag_no }}
-          draft: false
+      # - name: set git tag
+      #   run: |
+      #     echo "tag_no=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+      # - name: Create release PR
+      #   uses: peter-evans/create-pull-request@v3
+      #   with:
+      #     branch: release_today
+      #     base: main
+      #     title: Deploy ${{ env.tag_no }}
+      #     draft: false
 
 
