@@ -32,21 +32,21 @@ jobs:
       - name: set git tag
         run: |
           echo "tag_no=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
-      - name: Create Pull Request
-        id: create_pull_request
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH_NAME: release
-          MESSAGE: deploy ${{ env.tag_no }}
-        run: |
-          PULL_REQUEST_MESSAGE=`echo -e "$MESSAGE"`
-          hub pull-request -m "${{ env.MESSAGE }}" -b main -h release
-      # - name: Create release PR
-      #   uses: peter-evans/create-pull-request@v3
-      #   with:
-      #     branch: release
-      #     base: main
-      #     title: Deploy ${{ env.tag_no }}
-      #     draft: false
+      # - name: Create Pull Request
+      #   id: create_pull_request
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     BRANCH_NAME: release
+      #     MESSAGE: deploy ${{ env.tag_no }}
+      #   run: |
+      #     PULL_REQUEST_MESSAGE=`echo -e "$MESSAGE"`
+      #     hub pull-request -m "${{ env.MESSAGE }}" -b main -h release
+      - name: Create release PR
+        uses: peter-evans/create-pull-request@v4
+        with:
+          branch: release
+          base: main
+          title: Deploy ${{ env.tag_no }}
+          draft: false
 
 
