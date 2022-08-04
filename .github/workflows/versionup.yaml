@@ -3,9 +3,6 @@ name: Versionup Patch
 on:
   workflow_dispatch:
 
-env:
-  RELEASE_BRANCH: release_latest
-
 jobs:
   versionup-patch:
     runs-on: ubuntu-18.04
@@ -29,8 +26,8 @@ jobs:
       - name: create release
         run: |
           git fetch --tags
-          git checkout -b release_latest
-          git push --set-upstream origin release_latest
+          git checkout -b release_today
+          git push --set-upstream origin release_today
       - name: version up
         run: |
           yarn versionup:patch --yes
@@ -42,7 +39,7 @@ jobs:
         id: create_release_pr
         uses: peter-evans/create-pull-request@v3
         with:
-          branch: release_latest
+          branch: release_today
           base: main
           title: Deploy ${{ env.tag_no }}
           draft: false
