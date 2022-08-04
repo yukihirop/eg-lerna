@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  RELEASE_BRANCH: release_today
+  RELEASE_BRANCH: release_today_2
 
 jobs:
   versionup-patch:
@@ -39,6 +39,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MESSAGE: Deploy ${{ env.tag_no }}
         run: |
-          hub pull-request -m "${{ env.MESSAGE }}" -b main -h ${{ env.RELEASE_BRANCH }}
+          hub pull-request -m "${{ env.MESSAGE }}" -b main -h ${{ env.RELEASE_BRANCH }} --reviewer yukihirop
 
 
