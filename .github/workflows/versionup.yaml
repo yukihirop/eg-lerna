@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  RELEASE_BRANCH: latest_release
+  RELEASE_BRANCH: release_latest
 
 jobs:
   versionup-patch:
