@@ -3,6 +3,9 @@ name: Versionup Patch
 on:
   workflow_dispatch:
 
+env:
+  RELEASE_BRANCH: release
+
 jobs:
   versionup-patch:
     runs-on: ubuntu-18.04
@@ -23,8 +26,8 @@ jobs:
       - name: create release
         run: |
           git fetch --tags
-          git checkout -b release
-          git push --set-upstream origin release
+          git checkout -b ${{ env.RELEASE_BRANCH }}
+          git push --set-upstream origin ${{ env.RELEASE_BRANCH }}
       - name: version up
         run: |
           yarn versionup:patch --yes
@@ -32,21 +35,12 @@ jobs:
       - name: set git tag
         run: |
           echo "tag_no=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
-      # - name: Create Pull Request
-      #   id: create_pull_request
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     BRANCH_NAME: release
-      #     MESSAGE: deploy ${{ env.tag_no }}
-      #   run: |
-      #     PULL_REQUEST_MESSAGE=`echo -e "$MESSAGE"`
-      #     hub pull-request -m "${{ env.MESSAGE }}" -b main -h release
-      - name: Create release PR
-        uses: peter-evans/create-pull-request@v4
-        with:
-          branch: release
-          base: main
-          title: Deploy ${{ env.tag_no }}
-          draft: false
+      - name: Create Pull Request
+        id: create_pull_request
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MESSAGE: Deploy ${{ env.tag_no }}
+        run: |
+          hub pull-request -m "${{ env.MESSAGE }}" -b main -h ${{ env.RELEASE_BRANCH }}
 
 
